@@ -1,5 +1,5 @@
-import { Transactions, Validation } from 'crypto-wallet-core';
-import { Web3 } from 'crypto-wallet-core';
+import { Transactions, Validation } from 'crypto-wallet-core-quras';
+import { Web3 } from 'crypto-wallet-core-quras';
 import _ from 'lodash';
 import * as log from 'npmlog';
 import { IAddress } from 'src/lib/model/address';

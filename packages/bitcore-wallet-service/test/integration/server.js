@@ -12,7 +12,7 @@ log.debug = log.verbose;
 var config = require('../../ts_build/config.js');
 const { ChainService } = require('../../ts_build/lib/chain/index');
 
-var CWC = require('crypto-wallet-core');
+var CWC = require('crypto-wallet-core-quras');
 var Bitcore = require('bitcore-lib');
 var Bitcore_ = {
   btc: Bitcore,

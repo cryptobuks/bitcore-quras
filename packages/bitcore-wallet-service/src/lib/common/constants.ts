@@ -1,5 +1,5 @@
 'use strict';
-import * as CWC from 'crypto-wallet-core';
+import * as CWC from 'crypto-wallet-core-quras';
 
 module.exports = {
   COINS: {
@@ -10,14 +10,16 @@ module.exports = {
     USDC: 'usdc',
     PAX: 'pax',
     GUSD: 'gusd',
-    BUSD: 'busd'
+    BUSD: 'busd',
+    XQC: 'xqc'
   },
 
   ERC20: {
     USDC: 'usdc',
     PAX: 'pax',
     GUSD: 'gusd',
-    BUSD: 'busd'
+    BUSD: 'busd',
+    XQC: 'xqc'
   },
 
   UTXO_COINS: {

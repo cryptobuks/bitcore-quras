@@ -1,4 +1,4 @@
-import * as CryptoWalletCore from 'crypto-wallet-core';
+import * as CryptoWalletCore from 'crypto-wallet-core-quras';
 import 'source-map-support/register';
 import { Client } from './client';
 import { Encryption } from './encryption';

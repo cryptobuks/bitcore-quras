@@ -1,4 +1,4 @@
-import { Validation } from 'crypto-wallet-core';
+import { Validation } from 'crypto-wallet-core-quras';
 import { Response, Router } from 'express';
 import { ChainStateProvider } from '../../providers/chain-state';
 import { Auth, AuthenticatedRequest } from '../../utils/auth';

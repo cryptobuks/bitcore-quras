@@ -1,5 +1,5 @@
 import * as async from 'async';
-import { BitcoreLib } from 'crypto-wallet-core';
+import { BitcoreLib } from 'crypto-wallet-core-quras';
 import _ from 'lodash';
 import * as log from 'npmlog';
 import { IChain, INotificationData } from '..';
