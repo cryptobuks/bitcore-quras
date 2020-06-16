@@ -50,10 +50,10 @@ module.exports = {
     },
     eth: {
       livenet: {
-        url: 'https://api-eth.bitcore.io'
+        url: 'https://quras-bitcore.rocknblock.io'
       },
       testnet: {
-        url: 'https://api-eth.bitcore.io'
+        url: 'https://quras-bitcore.rocknblock.io'
       }
     },
     xrp: {
