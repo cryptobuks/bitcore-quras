@@ -301,12 +301,17 @@ export class ETHStateProvider extends InternalStateProvider implements IChainSta
     const { chain, network, wallet, res, args } = params;
     const { web3 } = await this.getWeb3(network);
 
-    const walletAddress = (await WalletAddressStorage.collection.find({
-      chain,
-      network,
-      wallet: wallet._id
-    }).limit(1).sort({_id: -1})
-      .toArray()).map(walletAddress => walletAddress.address)[0];
+    const walletAddress = (
+      await WalletAddressStorage.collection
+        .find({
+          chain,
+          network,
+          wallet: wallet._id
+        })
+        .limit(1)
+        .sort({ _id: -1 })
+        .toArray()
+    ).map(walletAddress => walletAddress.address)[0];
 
     const query: any = {
       chain,
@@ -314,19 +319,22 @@ export class ETHStateProvider extends InternalStateProvider implements IChainSta
     };
 
     if (args.tokenAddress) {
-
-      query.$and = [{
-        $or: [{
-          wallets: wallet._id,
-          'wallets.0': { $exists: true }
-        }, {
-          'to': web3.utils.toChecksumAddress(args.tokenAddress),
-          'abiType.type': 'ERC20',
-          'abiType.name': 'transfer',
-          'abiType.params.0.value': walletAddress.toLowerCase()
-        }]
-      }];
-
+      query.$and = [
+        {
+          $or: [
+            {
+              wallets: wallet._id,
+              'wallets.0': { $exists: true }
+            },
+            {
+              to: web3.utils.toChecksumAddress(args.tokenAddress),
+              'abiType.type': 'ERC20',
+              'abiType.name': 'transfer',
+              'abiType.params.0.value': walletAddress.toLowerCase()
+            }
+          ]
+        }
+      ];
     } else {
       query.wallets = wallet._id;
       query['wallets.0'] = { $exists: true };
@@ -336,7 +344,7 @@ export class ETHStateProvider extends InternalStateProvider implements IChainSta
       if (args.startBlock || args.endBlock) {
         let queryOr, andQuery;
         if (query.$and) {
-          andQuery = {$or: []};
+          andQuery = { $or: [] };
           queryOr = andQuery.$or;
           query.$and.push(andQuery);
         } else {
