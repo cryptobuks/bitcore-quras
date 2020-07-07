@@ -300,18 +300,52 @@ export class ETHStateProvider extends InternalStateProvider implements IChainSta
   async streamWalletTransactions(params: StreamWalletTransactionsParams) {
     const { chain, network, wallet, res, args } = params;
     const { web3 } = await this.getWeb3(network);
-    const query: any = {
+
+    const walletAddress = (await WalletAddressStorage.collection.find({
       chain,
       network,
-      wallets: wallet._id,
-      'wallets.0': { $exists: true }
+      wallet: wallet._id
+    }).limit(1).sort({_id: -1})
+      .toArray()).map(walletAddress => walletAddress.address)[0];
+
+    const query: any = {
+      chain,
+      network
     };
+
+    if (args.tokenAddress) {
+
+      query.$and = [{
+        $or: [{
+          wallets: wallet._id,
+          'wallets.0': { $exists: true }
+        }, {
+          'to': web3.utils.toChecksumAddress(args.tokenAddress),
+          'abiType.type': 'ERC20',
+          'abiType.name': 'transfer',
+          'abiType.params.0.value': walletAddress.toLowerCase()
+        }]
+      }];
+
+    } else {
+      query.wallets = wallet._id;
+      query['wallets.0'] = { $exists: true };
+    }
 
     if (args) {
       if (args.startBlock || args.endBlock) {
-        query.$or = [];
+        let queryOr, andQuery;
+        if (query.$and) {
+          andQuery = {$or: []};
+          queryOr = andQuery.$or;
+          query.$and.push(andQuery);
+        } else {
+          query.$or = [];
+          queryOr = query.$or;
+        }
+
         if (args.includeMempool) {
-          query.$or.push({ blockHeight: SpentHeightIndicators.pending });
+          queryOr.push({ blockHeight: SpentHeightIndicators.pending });
         }
         let blockRangeQuery = {} as any;
         if (args.startBlock) {
@@ -320,7 +354,7 @@ export class ETHStateProvider extends InternalStateProvider implements IChainSta
         if (args.endBlock) {
           blockRangeQuery.$lte = Number(args.endBlock);
         }
-        query.$or.push({ blockHeight: blockRangeQuery });
+        queryOr.push({ blockHeight: blockRangeQuery });
       } else {
         if (args.startDate) {
           const startDate = new Date(args.startDate);
