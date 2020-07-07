@@ -2978,7 +2978,8 @@ export class WalletService {
             action: undefined,
             addressTo: undefined,
             outputs: undefined,
-            dust: false
+            dust: false,
+            addressFrom: tx.from
           };
           switch (tx.category) {
             case 'send':
