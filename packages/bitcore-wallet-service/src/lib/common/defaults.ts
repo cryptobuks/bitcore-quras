@@ -119,7 +119,7 @@ module.exports = {
 
   // Number of confirmations from which tx in history will be cached
   // (ie we consider them inmutables)
-  CONFIRMATIONS_TO_START_CACHING: 5, // 6 * 6, // ~ 6hrs
+  CONFIRMATIONS_TO_START_CACHING: 6 * 6, // ~ 6hrs
 
   // Number of addresses from which tx history is enabled in a wallet
   HISTORY_CACHE_ADDRESS_THRESOLD: 100,
@@ -132,7 +132,7 @@ module.exports = {
   // Cache time for blockchain height (in ms)
   // this is actually erased on 'new block' notifications
   // so, 30m seems fine
-  BLOCKHEIGHT_CACHE_TIME: 30 * 60 * 1000,
+  BLOCKHEIGHT_CACHE_TIME: 60 * 1000,
 
   // Cache time fee levels (in ms)
   FEE_LEVEL_CACHE_DURATION: 6 * 60 * 1000,
