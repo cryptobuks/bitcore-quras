@@ -267,6 +267,8 @@ export class EthP2pWorker extends BaseP2PWorker<IEthBlock> {
       { upsert: true }
     );
     this.events.emit('SYNCDONE');
+    await wait(10000);
+    this.sync();
     return true;
   }
 
