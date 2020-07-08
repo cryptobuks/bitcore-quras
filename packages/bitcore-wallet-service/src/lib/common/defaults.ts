@@ -119,7 +119,7 @@ module.exports = {
 
   // Number of confirmations from which tx in history will be cached
   // (ie we consider them inmutables)
-  CONFIRMATIONS_TO_START_CACHING: 6 * 6, // ~ 6hrs
+  CONFIRMATIONS_TO_START_CACHING: 5, // 6 * 6, // ~ 6hrs
 
   // Number of addresses from which tx history is enabled in a wallet
   HISTORY_CACHE_ADDRESS_THRESOLD: 100,
