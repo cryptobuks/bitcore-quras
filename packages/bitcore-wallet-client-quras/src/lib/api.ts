@@ -21,7 +21,8 @@ var Bitcore_ = {
   btc: CWC.BitcoreLib,
   bch: CWC.BitcoreLibCash,
   eth: CWC.BitcoreLib,
-  xrp: CWC.BitcoreLib
+  xrp: CWC.BitcoreLib,
+  xqcn: CWC.QurascoreLib,
 };
 var Mnemonic = require('bitcore-mnemonic');
 var url = require('url');

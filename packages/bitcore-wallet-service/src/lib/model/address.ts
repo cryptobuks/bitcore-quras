@@ -39,7 +39,8 @@ export class Address {
 
   static Bitcore = {
     btc: require('bitcore-lib'),
-    bch: require('bitcore-lib-cash')
+    bch: require('bitcore-lib-cash'),
+    xqcn: require('qurascore-lib')
   };
 
   static create(opts) {
@@ -57,7 +58,7 @@ export class Address {
     x.path = opts.path;
     x.publicKeys = opts.publicKeys;
     x.coin = opts.coin;
-    x.network = Address.Bitcore[opts.coin]
+    x.network = Address.Bitcore[opts.coin] && opts.coin !== 'xqcn'
       ? Address.Bitcore[opts.coin].Address(x.address).toObject().network
       : opts.network;
     x.type = opts.type || Constants.SCRIPT_TYPES.P2SH;
@@ -115,7 +116,7 @@ export class Address {
       case Constants.SCRIPT_TYPES.P2PKH:
         $.checkState(_.isArray(publicKeys) && publicKeys.length == 1);
 
-        if (Address.Bitcore[coin]) {
+        if (Address.Bitcore[coin] && (coin !== 'xqcn')) {
           bitcoreAddress = Address.Bitcore[coin].Address.fromPublicKey(publicKeys[0], network);
         } else {
           const { addressIndex, isChange } = new AddressManager().parseDerivationPath(path);

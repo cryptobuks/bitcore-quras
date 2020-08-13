@@ -126,6 +126,7 @@ export class TxProposal {
   destinationTag?: string;
   invoiceID?: string;
   lockUntilBlockHeight?: number;
+  private balanceInfo?: any;
 
   static create(opts) {
     opts = opts || {};
@@ -198,7 +199,7 @@ export class TxProposal {
     // XRP
     x.destinationTag = opts.destinationTag;
     x.invoiceID = opts.invoiceID;
-
+    x.balanceInfo = opts.balanceInfo;
     return x;
   }
 
@@ -259,6 +260,7 @@ export class TxProposal {
     // XRP
     x.destinationTag = obj.destinationTag;
     x.invoiceID = obj.invoiceID;
+    x.balanceInfo = obj.balanceInfo;
 
     if (x.status == 'broadcasted') {
       x.raw = obj.raw;

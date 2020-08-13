@@ -17,6 +17,11 @@ export const Paths = {
     livenet: "m/44'/144'/",
     testnet: "m/44'/144'/"
   },
+  XQCN: {
+    mainnet: "m/44'/777'/",
+    livenet: "m/44'/777'/",
+    testnet: "m/44'/777'/"
+  },
   default: {
     testnet: "m/44'/1'/"
   }

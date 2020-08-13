@@ -88,6 +88,13 @@ module.exports = {
         nbBlocks: 1, // 3 seconds
         defaultValue: 12
       }
+    ],
+    xqcn: [
+      {
+        name: 'normal',
+        nbBlocks: 1, // 3 seconds
+        defaultValue: 0.2
+      }
     ]
   },
 
@@ -200,21 +207,24 @@ module.exports = {
     btc: 10000 * 1000, // 10k sat/b
     bch: 10000 * 1000, // 10k sat/b
     eth: 50000000000, // 50 Gwei,
-    xrp: 50000000000
+    xrp: 50000000000,
+    xqcn: 50000000000
   },
 
   MIN_TX_FEE: {
     btc: 0,
     bch: 0,
     eth: 0,
-    xrp: 0
+    xrp: 0,
+    xqcn: 0
   },
 
   MAX_TX_FEE: {
     btc: 0.05 * 1e8,
     bch: 0.05 * 1e8,
     eth: 1 * 1e18, // 1 eth
-    xrp: 1 * 1e6 // 1 xrp
+    xrp: 1 * 1e6, // 1 xrp
+    xqcn: 1 * 1e6, // 1 xqc
   },
 
   // ETH

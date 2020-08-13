@@ -14,7 +14,8 @@ const Bitcore_ = {
   btc: Bitcore,
   bch: require('bitcore-lib-cash'),
   eth: Bitcore,
-  xrp: Bitcore
+  xrp: Bitcore,
+  xqcn: Bitcore
 };
 const config = require('../../config');
 const Constants = Common.Constants,
@@ -393,42 +394,59 @@ export class V8 {
   estimateFee(nbBlocks, cb) {
     nbBlocks = nbBlocks || [1, 2, 6, 24];
     const result = {};
+    if (this.coin.toUpperCase() === 'XQCN') {
+      const url = this.baseUrl + '/fee/0';
+      this.request
+        .get(url, {})
+        .then(ret => {
+          try {
+            ret = JSON.parse(ret);
+            nbBlocks.forEach((x) => {
+              result[x] = (ret[x] || ret[0]).feerate;
+            });
+            console.log(result);
+            return cb(null, result);
+          } catch(err) {
+            log.warn('fee error:', err);
+          }
+        })
+    } else {
+      async.each(
+        nbBlocks,
+        (x: string, icb) => {
+          const url = this.baseUrl + '/fee/' + x;
+          this.request
+            .get(url, {})
+            .then(ret => {
+              try {
+                ret = JSON.parse(ret);
 
-    async.each(
-      nbBlocks,
-      (x: string, icb) => {
-        const url = this.baseUrl + '/fee/' + x;
-        this.request
-          .get(url, {})
-          .then(ret => {
-            try {
-              ret = JSON.parse(ret);
+                // only process right responses.
+                if (!_.isUndefined(ret.blocks) && ret.blocks != x) {
+                  log.info(`Ignoring response for ${x}:` + JSON.stringify(ret));
+                  return icb();
+                }
 
-              // only process right responses.
-              if (!_.isUndefined(ret.blocks) && ret.blocks != x) {
-                log.info(`Ignoring response for ${x}:` + JSON.stringify(ret));
-                return icb();
+                result[x] = ret.feerate;
+              } catch (e) {
+                log.warn('fee error:', e);
               }
 
-              result[x] = ret.feerate;
-            } catch (e) {
-              log.warn('fee error:', e);
-            }
-
-            return icb();
-          })
-          .catch(err => {
-            return icb(err);
-          });
-      },
-      err => {
-        if (err) {
-          return cb(err);
+              return icb();
+            })
+            .catch(err => {
+              return icb(err);
+            });
+        },
+        err => {
+          if (err) {
+            return cb(err);
+          }
+          // TODO: normalize result
+          return cb(null, result);
         }
-        // TODO: normalize result
-        return cb(null, result);
-      }
-    );
+      );
+    }
   }
 
   getBlockchainHeight(cb) {

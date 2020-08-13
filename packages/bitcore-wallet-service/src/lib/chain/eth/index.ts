@@ -331,4 +331,5 @@ export class EthChain implements IChain {
       }
     };
   }
+  checkBalanceInfo(server, wallet, opts) {}
 }

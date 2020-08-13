@@ -12,11 +12,13 @@ const Common = require('../common');
 const Constants = Common.Constants,
   Defaults = Common.Defaults,
   Utils = Common.Utils;
+const BitcoreLib = require('bitcore-lib');
 const Bitcore = {
-  btc: require('bitcore-lib'),
+  btc: BitcoreLib,
   bch: require('bitcore-lib-cash'),
-  eth: require('bitcore-lib'),
-  xrp: require('bitcore-lib')
+  eth: BitcoreLib,
+  xrp: BitcoreLib,
+  xqcn: BitcoreLib
 };
 
 export interface IWallet {
