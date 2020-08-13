@@ -1,6 +1,6 @@
 {
   "name": "crypto-wallet-core-quras",
-  "version": "8.20.30",
+  "version": "8.21.0",
   "description": "A multi-currency support library for address derivation, private key creation, and transaction creation",
   "main": "./ts_build/src/index.js",
   "types": "./ts_build/src/index.d.ts",
