@@ -16,7 +16,7 @@ const Bitcore_ = {
   bch: BitcoreLibCash,
   eth: Bitcore,
   xrp: Bitcore,
-  xqcn: Bitcore,
+  xqcn: Bitcore
 };
 var HDBitcore_ = {
   xqcn: QurascoreLib

@@ -140,9 +140,7 @@ export class XqcBlockModel extends BaseBlock<IEthBlock> {
       }
       logger.info(`Resetting tip to ${localTip.height - 1}`, { chain, network });
     }
-    const reorgOps = [
-      this.collection.deleteMany({ chain, network, height: { $gte: localTip.height } })
-    ];
+    const reorgOps = [this.collection.deleteMany({ chain, network, height: { $gte: localTip.height } })];
     await Promise.all(reorgOps);
 
     logger.debug('Removed data from above blockHeight: ', localTip.height);

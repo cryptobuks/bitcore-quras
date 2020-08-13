@@ -25,7 +25,7 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
   public events: EventEmitter;
   public disconnecting: boolean;
 
-  constructor({ chain, network, chainConfig, blockModel = XqcBlockStorage}) {
+  constructor({ chain, network, chainConfig, blockModel = XqcBlockStorage }) {
     super({ chain, network, chainConfig, blockModel });
     this.chain = chain || 'XQCN';
     this.network = network;
@@ -41,7 +41,6 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
     };
     this.disconnecting = false;
   }
-
 
   async setupListeners() {
     const { host, port } = this.chainConfig.provider;
@@ -91,7 +90,6 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
         } catch (e) {
           connected = false;
         }
-
 
         if (connected) {
           if (disconnected || firstConnect) {
@@ -144,7 +142,6 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
     }
   }
 
-
   async sync() {
     if (this.syncing) {
       return false;
@@ -170,7 +167,7 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
     const startHeight = tip ? tip.height : 0;
     const startTime = Date.now();
     try {
-      let bestBlock = await this.rpc.getBlockCount() - 1;
+      let bestBlock = (await this.rpc.getBlockCount()) - 1;
       let lastLog = 0;
       let currentHeight = tip ? tip.height : 0;
       logger.info(`Syncing ${bestBlock - currentHeight} blocks for ${chain} ${network}`);
@@ -183,11 +180,11 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
         try {
           const { convertedBlock, convertedTxs } = await this.convertBlock(block);
           await this.processBlock(convertedBlock, convertedTxs);
-        } catch(err) {
+        } catch (err) {
           console.log(err);
         }
         if (currentHeight === bestBlock) {
-          bestBlock = await this.rpc.getBlockCount() - 1;
+          bestBlock = (await this.rpc.getBlockCount()) - 1;
         }
         tip = await ChainStateProvider.getLocalTip({ chain, network });
         currentHeight = tip ? tip.height + 1 : 0;
@@ -251,8 +248,8 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
       processed: false
     };
     const transactions = block.tx as Array<XqcTransaction>;
-    const promises = await transactions.map((t) => {
-      return this.convertTx(t, convertedBlock)
+    const promises = await transactions.map(t => {
+      return this.convertTx(t, convertedBlock);
     });
     const convertedTxs = await Promise.all(promises);
     return { convertedBlock, convertedTxs };
@@ -276,11 +273,11 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
       let asset;
 
       if (assetId) {
-        const fullAsset = await this.provider.getAssetInfo(assetId.slice(2), this.network) as any;
+        const fullAsset = (await this.provider.getAssetInfo(assetId.slice(2), this.network)) as any;
         asset = {
           type: fullAsset.type,
           symbol: fullAsset.symbol,
-          name: fullAsset.name,
+          name: fullAsset.name
         };
       }
 

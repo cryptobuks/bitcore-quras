@@ -12,7 +12,7 @@ module.exports = {
     GUSD: 'gusd',
     BUSD: 'busd',
     XQC: 'xqc',
-    XQCN: 'xqcn',
+    XQCN: 'xqcn'
   },
 
   ERC20: {

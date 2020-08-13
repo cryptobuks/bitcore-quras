@@ -22,7 +22,6 @@ function requireUncached(module) {
   return require(module);
 }
 
-
 const InvoiceDecoder = requireUncached('abi-decoder');
 InvoiceDecoder.addABI(InvoiceAbi);
 function getInvoiceDecoder() {
@@ -226,10 +225,7 @@ export class XqcTransactionModel extends BaseTransaction<IXqcTransaction> {
     return undefined;
   }
 
-  _apiTransform(
-    tx: IXqcTransaction | Partial<MongoBound<IXqcTransaction>>,
-    options?: TransformOptions
-  ): any | string {
+  _apiTransform(tx: IXqcTransaction | Partial<MongoBound<IXqcTransaction>>, options?: TransformOptions): any | string {
     const transaction: any = {
       txid: tx.txid || '',
       network: tx.network || '',

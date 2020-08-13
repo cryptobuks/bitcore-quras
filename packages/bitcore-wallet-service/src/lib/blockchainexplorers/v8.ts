@@ -396,20 +396,18 @@ export class V8 {
     const result = {};
     if (this.coin.toUpperCase() === 'XQCN') {
       const url = this.baseUrl + '/fee/0';
-      this.request
-        .get(url, {})
-        .then(ret => {
-          try {
-            ret = JSON.parse(ret);
-            nbBlocks.forEach((x) => {
-              result[x] = (ret[x] || ret[0]).feerate;
-            });
-            console.log(result);
-            return cb(null, result);
-          } catch(err) {
-            log.warn('fee error:', err);
-          }
-        })
+      this.request.get(url, {}).then(ret => {
+        try {
+          ret = JSON.parse(ret);
+          nbBlocks.forEach(x => {
+            result[x] = (ret[x] || ret[0]).feerate;
+          });
+          console.log(result);
+          return cb(null, result);
+        } catch (err) {
+          log.warn('fee error:', err);
+        }
+      });
     } else {
       async.each(
         nbBlocks,

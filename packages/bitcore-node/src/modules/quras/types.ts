@@ -27,16 +27,16 @@ export interface XqcBlock {
   uncles: Array<string>;
 }
 export interface IXqcTransaction {
-  scripts: any[]|undefined;
+  scripts: any[] | undefined;
   chain: string;
   network: string;
   blockHeight: number;
-  blockHash: string|undefined;
+  blockHash: string | undefined;
   asset: {
     type: string;
     symbol: string;
     name: string;
-  }
+  };
   txid: string;
   blockTime: Date;
   blockTimeNormalized: Date;
@@ -62,11 +62,11 @@ export interface XqcTransaction {
     value: string;
     address: string;
   }[];
-  blockHash: string|undefined;
-  blockNumber: number|undefined;
+  blockHash: string | undefined;
+  blockNumber: number | undefined;
   chainId: number;
   condition: number;
-  scripts: any[]|undefined;
+  scripts: any[] | undefined;
   creates: number;
   from: string;
   gas: number;

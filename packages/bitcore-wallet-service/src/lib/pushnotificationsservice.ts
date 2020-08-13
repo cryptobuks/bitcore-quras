@@ -341,7 +341,7 @@ export class PushNotificationsService {
       gusd: 'GUSD',
       busd: 'BUSD',
       xqc: 'XQC',
-      xqcn: 'XQCN',
+      xqcn: 'XQCN'
     };
     const data = _.cloneDeep(notification.data);
     data.subjectPrefix = _.trim(this.subjectPrefix + ' ');

@@ -63,7 +63,7 @@ const chain: { [chain: string]: IChain } = {
   BCH: new BchChain(),
   ETH: new EthChain(),
   XRP: new XrpChain(),
-  XQCN: new XqcChain(),
+  XQCN: new XqcChain()
 };
 
 class ChainProxy {
@@ -179,8 +179,6 @@ class ChainProxy {
   checkBalanceInfo(server, wallet, opts) {
     return this.get(wallet.coin).checkBalanceInfo(server, wallet, opts);
   }
-
-
 }
 
 export let ChainService = new ChainProxy();

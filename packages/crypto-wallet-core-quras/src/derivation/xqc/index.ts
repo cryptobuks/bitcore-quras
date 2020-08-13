@@ -4,9 +4,7 @@ import QurasLib from 'quras-js';
 
 const BitcoreLib = require('qurascore-lib');
 
-
 export class XqcDeriver implements IDeriver {
-
   deriveAddress(network, xpubkey, addressIndex, isChange) {
     const xpub = new BitcoreLib.HDPublicKey(xpubkey, network);
     const changeNum = isChange ? 1 : 0;

@@ -6,10 +6,10 @@ import {
   GetBalanceForAddressParams,
   GetWalletBalanceParams,
   IChainStateService
-} from '../../../types/namespaces/ChainStateProvider'
+} from '../../../types/namespaces/ChainStateProvider';
 import { XqcBlockStorage } from '../models/block';
 
-import QurasLib, {api as QurasApi} from 'quras-js';
+import QurasLib, { api as QurasApi } from 'quras-js';
 import { Readable } from 'stream';
 import { SpentHeightIndicators } from '../../../types/Coin';
 import { XqcTransactionStorage } from '../models/transaction';
@@ -20,9 +20,9 @@ const associatedLevels = {
 };
 
 const associatedNetworks = {
-  'testnet': 'TestNet',
-  'mainnet': 'TestNet',
-  'livenet': 'TestNet',
+  testnet: 'TestNet',
+  mainnet: 'TestNet',
+  livenet: 'TestNet'
 };
 
 export class XQCStateProvider extends InternalStateProvider implements IChainStateService {
@@ -54,23 +54,23 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
   }
 
   async getFee() {
-    return request.get('https://api.quraswallet.org/getTxFee', {
-      json: true,
-      rejectUnauthorized: false
-    }).then((result) => {
-      const levels = [] as any;
-      for (let k in result) {
-        if (associatedLevels[k]) {
-          levels.push({
-            feerate: result[k] * (10**8)
-          });
+    return request
+      .get('https://api.quraswallet.org/getTxFee', {
+        json: true,
+        rejectUnauthorized: false
+      })
+      .then(result => {
+        const levels = [] as any;
+        for (let k in result) {
+          if (associatedLevels[k]) {
+            levels.push({
+              feerate: result[k] * 10 ** 8
+            });
+          }
         }
-      }
-      return levels;
-    });
+        return levels;
+      });
   }
-
-
 
   async getBalanceForAddress(params: GetBalanceForAddressParams) {
     const { address } = params;
@@ -79,16 +79,16 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
     const assetSymbols = balance.assetSymbols.filter((name, i) => {
       return balance.assetSymbols.indexOf(name) === i;
     });
-    assetSymbols.forEach((assetSymbol) => {
+    assetSymbols.forEach(assetSymbol => {
       const confirmed = balance.assets[assetSymbol].unspent.reduce((currValue, item) => {
-        currValue += Number(item.value) * 10**8;
+        currValue += Number(item.value) * 10 ** 8;
         return currValue;
       }, 0);
       allBalances[assetSymbol] = {
         confirmed,
         unconfirmed: 0,
         balance: confirmed
-      }
+      };
     });
     return allBalances;
   }
@@ -111,7 +111,6 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
     }
     return txids.length === 1 ? txids[0] : txids;
   }
-
 
   async getWalletBalance(params: GetWalletBalanceParams) {
     const { network } = params;
@@ -146,13 +145,11 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
       'asset.type': 'GoverningToken'
     };
 
-    query.$and = [{
-      $or: [
-        {wallets: wallet._id},
-        {to: address},
-        {from: address}
-      ]
-    }];
+    query.$and = [
+      {
+        $or: [{ wallets: wallet._id }, { to: address }, { from: address }]
+      }
+    ];
 
     if (args) {
       if (args.startBlock || args.endBlock) {
@@ -201,11 +198,8 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
       .sort({ blockTimeNormalized: 1 })
       .addCursorFlag('noCursorTimeout', true);
 
-    transactionStream
-      .pipe(xqcTransactionTransform)
-      .pipe(res);
+    transactionStream.pipe(xqcTransactionTransform).pipe(res);
   }
-
 }
 
 export const XQC = new XQCStateProvider();

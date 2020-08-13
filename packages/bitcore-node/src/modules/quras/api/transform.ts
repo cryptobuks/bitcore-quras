@@ -4,7 +4,7 @@ import { IWallet } from '../../../models/wallet';
 import { WalletAddressStorage } from '../../../models/walletAddress';
 import { IXqcTransaction } from '../types';
 
-const coinsDecimals =  10**8;
+const coinsDecimals = 10 ** 8;
 
 export class XqcListTransactionsStream extends Transform {
   constructor(private wallet: IWallet) {

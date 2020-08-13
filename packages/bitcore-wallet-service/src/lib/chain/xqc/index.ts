@@ -12,9 +12,9 @@ const Defaults = Common.Defaults;
 const Errors = require('../../errors/errordefinitions');
 
 const associatedNetworks = {
-  'testnet': 'TestNet',
-  'mainnet': 'TestNet',
-  'livenet': 'TestNet',
+  testnet: 'TestNet',
+  mainnet: 'TestNet',
+  livenet: 'TestNet'
 };
 export class XqcChain implements IChain {
   /**
@@ -24,22 +24,21 @@ export class XqcChain implements IChain {
    * @returns {Object} balance - Total amount & locked amount.
    */
   private convertBitcoreBalance(bitcoreBalance: any, locked) {
-
     // we ASUME all locked as confirmed, for ETH.
     const convertedBalances = {};
     const coins = ['XQC', 'XQG'];
 
     for (let i of coins) {
-      const { confirmed, balance } = bitcoreBalance[i] || {} as any;
+      const { confirmed, balance } = bitcoreBalance[i] || ({} as any);
       convertedBalances[i] = {
         totalAmount: balance || 0,
         totalConfirmedAmount: confirmed || 0,
         lockedAmount: locked || 0,
         lockedConfirmedAmount: locked || 0,
         availableAmount: balance - locked || 0,
-        availableConfirmedAmount: (confirmed !== undefined) && (locked !== undefined) ? confirmed - locked : 0,
+        availableConfirmedAmount: confirmed !== undefined && locked !== undefined ? confirmed - locked : 0,
         byAddress: []
-      }
+      };
     }
 
     return convertedBalances;
@@ -71,11 +70,13 @@ export class XqcChain implements IChain {
           if (err) return cb(err);
 
           if (addresses.length > 0) {
-            const byAddress = [{
-              address: addresses[0].address,
-              path: addresses[0].path,
-              amount: responseBalance.totalAmount
-            }];
+            const byAddress = [
+              {
+                address: addresses[0].address,
+                path: addresses[0].path,
+                amount: responseBalance.totalAmount
+              }
+            ];
             responseBalance.byAddress = byAddress;
           }
           return cb(null, responseBalance);
@@ -117,7 +118,7 @@ export class XqcChain implements IChain {
           feePerKb: 0,
           gasPrice: 0,
           gasLimit: 0
-        })
+        });
       });
     });
   }
@@ -251,8 +252,7 @@ export class XqcChain implements IChain {
         tx.id = Transactions.getHash({ tx: signed, chain, network });
       }
       tx.uncheckedSerialize = () => signedTxs;
-
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
   }

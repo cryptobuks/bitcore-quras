@@ -46,7 +46,7 @@ const Bitcore_ = {
   bch: require('bitcore-lib-cash'),
   eth: Bitcore,
   xrp: Bitcore,
-  xqcn: require('qurascore-lib'),
+  xqcn: require('qurascore-lib')
 };
 
 const Common = require('./common');

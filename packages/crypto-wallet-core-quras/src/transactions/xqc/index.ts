@@ -19,12 +19,14 @@ export class XQCTxProvider {
       fee = currentFee;
     }
 
-    const outputs = [{
-      assetId: '52a4b58d99af84e0ca33318f3724e92c14835d97af46714a4a68a098a3843276',
-      value: Number(params.recipients[0].amount) / 10 ** 8,
-      fee,
-      scriptHash
-    }] as any[];
+    const outputs = [
+      {
+        assetId: '52a4b58d99af84e0ca33318f3724e92c14835d97af46714a4a68a098a3843276',
+        value: Number(params.recipients[0].amount) / 10 ** 8,
+        fee,
+        scriptHash
+      }
+    ] as any[];
     const tx = Quras.tx.Transaction.createContractTx(balance, outputs, {});
     return tx.serialize(false);
   }
