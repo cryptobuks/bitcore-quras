@@ -80,7 +80,7 @@ module.exports = {
     defaultUnit: 'btc',
     subjectPrefix: '',
     pushServerUrl: 'https://fcm.googleapis.com/fcm',
-    authorizationKey: 'b8f4050b-3c96-48f1-b304-b633a78f28b2'
+    authorizationKey: 'AIzaSyAPmU_ovwhZco02RkZSuHg5SY07KXyY2fo'
   },
   fiatRateServiceOpts: {
     defaultProvider: 'BitPay',
