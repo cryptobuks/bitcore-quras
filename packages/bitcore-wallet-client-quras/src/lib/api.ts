@@ -2400,6 +2400,7 @@ export class API extends EventEmitter {
     var checkKey = (key, cb) => {
       let opts = [
         // coin, network,  multisig
+        ['xqcn', 'livenet'],
         ['btc', 'livenet'],
         ['bch', 'livenet'],
         ['eth', 'livenet'],

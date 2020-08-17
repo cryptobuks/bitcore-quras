@@ -256,16 +256,15 @@ export class XqcP2pWorker extends BaseP2PWorker<IEthBlock> {
   }
 
   async convertTx(tx: XqcTransaction, block?: IEthBlock) {
-    let fromAddress;
-    if (tx.type !== 'MinerTransaction') {
-      if (tx.vin.length) {
-        const prevTx = await this.rpc.getRawTransaction(tx.vin[0].txid);
-        if (prevTx.vout.length) {
-          fromAddress = prevTx.vout[0].address;
+    if (!block) {
+      let fromAddress;
+      if (tx.type !== 'MinerTransaction') {
+        if (tx.vin.length) {
+          const prevInput = tx.vin[0];
+          const prevTx = await this.rpc.getRawTransaction(prevInput.txid);
+          fromAddress = prevTx.vout[prevInput.vout].address;
         }
       }
-    }
-    if (!block) {
       const toTx = tx.vout[0];
       const from = fromAddress;
       const to = toTx ? toTx.address : '';
