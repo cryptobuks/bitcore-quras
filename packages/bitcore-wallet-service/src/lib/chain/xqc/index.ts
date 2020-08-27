@@ -13,8 +13,8 @@ const Errors = require('../../errors/errordefinitions');
 
 const associatedNetworks = {
   testnet: 'TestNet',
-  mainnet: 'TestNet',
-  livenet: 'TestNet'
+  mainnet: 'MainNet',
+  livenet: 'MainNet'
 };
 export class XqcChain implements IChain {
   /**

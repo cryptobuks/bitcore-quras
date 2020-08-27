@@ -21,8 +21,8 @@ const associatedLevels = {
 
 const associatedNetworks = {
   testnet: 'TestNet',
-  mainnet: 'TestNet',
-  livenet: 'TestNet'
+  mainnet: 'MainNet',
+  livenet: 'MainNet'
 };
 
 export class XQCStateProvider extends InternalStateProvider implements IChainStateService {
