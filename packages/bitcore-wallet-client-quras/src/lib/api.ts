@@ -2401,6 +2401,7 @@ export class API extends EventEmitter {
       let opts = [
         // coin, network,  multisig
         ['xqcn', 'livenet'],
+        ['xqcn', 'testnet'],
         ['btc', 'livenet'],
         ['bch', 'livenet'],
         ['eth', 'livenet'],
