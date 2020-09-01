@@ -2,6 +2,7 @@ import { BchDeriver } from './bch';
 import { BtcDeriver } from './btc';
 import { EthDeriver } from './eth';
 import { Paths } from './paths';
+import { XqcDeriver } from './xqc';
 import { XrpDeriver } from './xrp';
 
 export interface Key {
@@ -20,7 +21,8 @@ const derivers: { [chain: string]: IDeriver } = {
   BTC: new BtcDeriver(),
   BCH: new BchDeriver(),
   ETH: new EthDeriver(),
-  XRP: new XrpDeriver()
+  XRP: new XrpDeriver(),
+  XQCN: new XqcDeriver()
 };
 
 export class DeriverProxy {

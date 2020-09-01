@@ -45,7 +45,8 @@ const Bitcore_ = {
   btc: Bitcore,
   bch: require('bitcore-lib-cash'),
   eth: Bitcore,
-  xrp: Bitcore
+  xrp: Bitcore,
+  xqcn: require('qurascore-lib')
 };
 
 const Common = require('./common');
@@ -1030,7 +1031,7 @@ export class WalletService {
 
     let xPubKey;
     try {
-      xPubKey = Bitcore.HDPublicKey(opts.xPubKey);
+      xPubKey = (Bitcore_[opts.coin] || Bitcore).HDPublicKey(opts.xPubKey);
     } catch (ex) {
       return cb(new ClientError('Invalid extended public key'));
     }
@@ -2173,6 +2174,12 @@ export class WalletService {
                   return next();
                 },
                 async next => {
+                  if (opts.coin === 'xqcn') {
+                    opts.balanceInfo = await ChainService.checkBalanceInfo(this, wallet, opts);
+                  }
+                  return next();
+                },
+                async next => {
                   opts.signingMethod = opts.signingMethod || 'ecdsa';
                   opts.coin = opts.coin || wallet.coin;
 
@@ -2228,7 +2235,8 @@ export class WalletService {
                     tokenAddress: opts.tokenAddress,
                     destinationTag: opts.destinationTag,
                     invoiceID: opts.invoiceID,
-                    signingMethod: opts.signingMethod
+                    signingMethod: opts.signingMethod,
+                    balanceInfo: opts.balanceInfo
                   };
                   txp = TxProposal.create(txOpts);
                   next();
@@ -2979,29 +2987,33 @@ export class WalletService {
             addressTo: undefined,
             outputs: undefined,
             dust: false,
-            addressFrom: tx.from
+            addressFrom: tx.from,
+            scripts: undefined,
+            asset: undefined
           };
           switch (tx.category) {
             case 'send':
               ret.action = 'sent';
               ret.amount = Math.abs(_.sumBy(tx.outputs, 'amount')) || Math.abs(tx.satoshis);
-              ret.addressTo = tx.outputs ? tx.outputs[0].address : null;
-              ret.outputs = tx.outputs;
               break;
             case 'receive':
               ret.action = 'received';
-              ret.outputs = tx.outputs;
               ret.amount = Math.abs(_.sumBy(tx.outputs, 'amount')) || Math.abs(tx.satoshis);
               ret.dust = ret.amount < dustThreshold;
               break;
             case 'move':
               ret.action = 'moved';
               ret.amount = Math.abs(tx.satoshis);
-              ret.addressTo = tx.outputs && tx.outputs.length ? tx.outputs[0].address : null;
-              ret.outputs = tx.outputs;
               break;
             default:
               ret.action = 'invalid';
+          }
+
+          if (ret.action != 'invalid') {
+            ret.scripts = tx.scripts;
+            ret.asset = tx.asset;
+            ret.outputs = tx.outputs;
+            ret.addressTo = tx.outputs && tx.outputs.length ? tx.outputs[0].address : null;
           }
 
           // not available

@@ -5,9 +5,12 @@ import * as _ from 'lodash';
 import { Constants, Utils } from './common';
 import { Credentials } from './credentials';
 
-import { BitcoreLib, BitcoreLibCash, Deriver, Transactions } from 'crypto-wallet-core-quras';
+import { BitcoreLib, BitcoreLibCash, Deriver, QurascoreLib, Transactions } from 'crypto-wallet-core-quras';
 
 var Bitcore = BitcoreLib;
+var Bitcore_ = {
+  xqcn: QurascoreLib
+};
 var Mnemonic = require('bitcore-mnemonic');
 var sjcl = require('sjcl');
 var log = require('./log');
@@ -239,9 +242,9 @@ export class Key {
     }
   };
 
-  derive = function(password, path) {
+  derive = function(password, path, coin?) {
     $.checkArgument(path, 'no path at derive()');
-    var xPrivKey = new Bitcore.HDPrivateKey(this.get(password).xPrivKey, NETWORK);
+    var xPrivKey = new (Bitcore_[coin] || Bitcore).HDPrivateKey(this.get(password).xPrivKey, NETWORK);
     var deriveFn = this.compliantDerivation
       ? _.bind(xPrivKey.deriveChild, xPrivKey)
       : _.bind(xPrivKey.deriveNonCompliantChild, xPrivKey);
@@ -283,6 +286,8 @@ export class Key {
       coinCode = '60';
     } else if (opts.coin == 'xrp') {
       coinCode = '144';
+    } else if (opts.coin == 'xqcn') {
+      coinCode = '777';
     } else {
       throw new Error('unknown coin: ' + opts.coin);
     }
@@ -311,7 +316,7 @@ export class Key {
     $.shouldBeUndefined(opts.useLegacyPurpose);
 
     let path = this.getBaseAddressDerivationPath(opts);
-    let xPrivKey = this.derive(password, path);
+    let xPrivKey = this.derive(password, path, opts.coin);
     let requestPrivKey = this.derive(password, Constants.PATHS.REQUEST_KEY).privateKey.toString();
 
     if (opts.network == 'testnet') {
@@ -322,7 +327,7 @@ export class Key {
       delete x.xprivkey;
       delete x.checksum;
       x.privateKey = _.padStart(x.privateKey, 64, '0');
-      xPrivKey = new Bitcore.HDPrivateKey(x);
+      xPrivKey = new (Bitcore_[opts.coin] || Bitcore).HDPrivateKey(x);
     }
 
     return Credentials.fromDerivedKey({
@@ -370,8 +375,8 @@ export class Key {
     var privs = [];
     var derived: any = {};
 
-    var derived = this.derive(password, rootPath);
-    var xpriv = new Bitcore.HDPrivateKey(derived);
+    derived = this.derive(password, rootPath, txp.coin);
+    var xpriv = new (Bitcore_[txp.coin] || Bitcore).HDPrivateKey(derived);
 
     var t = Utils.buildTx(txp);
 

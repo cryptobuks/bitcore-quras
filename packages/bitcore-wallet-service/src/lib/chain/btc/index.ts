@@ -821,4 +821,6 @@ export class BtcChain implements IChain {
   onTx(tx) {
     return null;
   }
+
+  checkBalanceInfo(server, wallet, opts) {}
 }

@@ -1,7 +1,8 @@
 import _ from 'lodash';
 const Bitcore_ = {
   btc: require('bitcore-lib'),
-  bch: require('bitcore-lib-cash')
+  bch: require('bitcore-lib-cash'),
+  xqcn: require('qurascore-lib')
 };
 
 export class BCHAddressTranslator {

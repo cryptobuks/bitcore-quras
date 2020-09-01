@@ -4,6 +4,8 @@ import { ConfigType } from './types/Config';
 import parseArgv from './utils/parseArgv';
 let program = parseArgv([], ['config']);
 
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 function findConfig(): ConfigType | undefined {
   let foundConfig;
   const envConfigPath = process.env.BITCORE_CONFIG_PATH;
@@ -62,7 +64,7 @@ const Config = function(): ConfigType {
     dbPass: process.env.DB_PASS || '',
     numWorkers: cpus().length,
     chains: {},
-    modules: ['./bitcoin', './bitcoin-cash', './ethereum'],
+    modules: ['./bitcoin', './bitcoin-cash', './ethereum', './quras'],
     services: {
       api: {
         rateLimiter: {

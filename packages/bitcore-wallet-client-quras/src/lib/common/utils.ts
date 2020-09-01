@@ -1,6 +1,6 @@
 'use strict';
 
-import { BitcoreLib, BitcoreLibCash, Deriver, Transactions } from 'crypto-wallet-core-quras';
+import { BitcoreLib, BitcoreLibCash, Deriver, QurascoreLib, Transactions } from 'crypto-wallet-core-quras';
 
 import * as _ from 'lodash';
 import { Constants } from './constants';
@@ -15,7 +15,11 @@ const Bitcore_ = {
   btc: Bitcore,
   bch: BitcoreLibCash,
   eth: Bitcore,
-  xrp: Bitcore
+  xrp: Bitcore,
+  xqcn: Bitcore
+};
+var HDBitcore_ = {
+  xqcn: QurascoreLib
 };
 const PrivateKey = Bitcore.PrivateKey;
 const PublicKey = Bitcore.PublicKey;
@@ -159,7 +163,7 @@ export class Utils {
 
     coin = coin || 'btc';
     const chain = this.getChain(coin).toLowerCase();
-    var bitcore = Bitcore_[chain];
+    var bitcore = HDBitcore_[chain] || Bitcore_[chain];
     var publicKeys = _.map(publicKeyRing, item => {
       var xpub = new bitcore.HDPublicKey(item.xPubKey);
       return xpub.deriveChild(path).publicKey;

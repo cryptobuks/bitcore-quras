@@ -11,7 +11,8 @@ module.exports = {
     PAX: 'pax',
     GUSD: 'gusd',
     BUSD: 'busd',
-    XQC: 'xqc'
+    XQC: 'xqc',
+    XQCN: 'xqcn'
   },
 
   ERC20: {

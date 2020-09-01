@@ -3,6 +3,7 @@ import { WalletService } from '../server';
 import { BchChain } from './bch';
 import { BtcChain } from './btc';
 import { EthChain } from './eth';
+import { XqcChain } from './xqc';
 import { XrpChain } from './xrp';
 
 const Common = require('../common');
@@ -54,13 +55,15 @@ export interface IChain {
   validateAddress(wallet: IWallet, inaddr: string, opts: { noCashAddr: boolean } & any);
   onCoin(coin: any): INotificationData | null;
   onTx(tx: any): INotificationData | null;
+  checkBalanceInfo(server: WalletService, wallet: IWallet, from: any): any;
 }
 
 const chain: { [chain: string]: IChain } = {
   BTC: new BtcChain(),
   BCH: new BchChain(),
   ETH: new EthChain(),
-  XRP: new XrpChain()
+  XRP: new XrpChain(),
+  XQCN: new XqcChain()
 };
 
 class ChainProxy {
@@ -171,6 +174,10 @@ class ChainProxy {
 
   onTx(coin: string, tx: any) {
     return this.get(coin).onTx(tx);
+  }
+
+  checkBalanceInfo(server, wallet, opts) {
+    return this.get(wallet.coin).checkBalanceInfo(server, wallet, opts);
   }
 }
 
