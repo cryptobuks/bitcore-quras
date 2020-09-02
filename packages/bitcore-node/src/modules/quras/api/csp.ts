@@ -9,7 +9,7 @@ import {
 } from '../../../types/namespaces/ChainStateProvider';
 import { XqcBlockStorage } from '../models/block';
 
-import QurasLib, { api as QurasApi } from 'quras-js';
+import QurasLib, { api as QurasApi, tx as QurasTx } from 'quras-js';
 import { Readable } from 'stream';
 import { SpentHeightIndicators } from '../../../types/Coin';
 import { XqcTransactionStorage } from '../models/transaction';
@@ -74,8 +74,26 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
 
   async getBalanceForAddress(params: GetBalanceForAddressParams) {
     const { address } = params;
+
+    const claimInfo = await QurasApi.qurasDB.getClaimInfo(associatedNetworks[params.network], address) as any;
     const balance = await QurasLib.get.balance(associatedNetworks[params.network], address);
-    const allBalances = {} as any;
+    let allBalances = {
+      claim: {
+        available: '0',
+        unavailable: '0',
+      }
+    } as any;
+    try {
+      if (+claimInfo.available.amount) {
+        allBalances.claim = {
+          available: claimInfo.available.amount,
+          unavailable: claimInfo.unavailable.amount,
+          tx: QurasTx.Transaction.createClaimTxWithQurasDB(address, claimInfo.available, {}).serialize(false)
+        }
+      }
+    } catch(e) {
+      console.log(e);
+    }
     const assetSymbols = balance.assetSymbols.filter((name, i) => {
       return balance.assetSymbols.indexOf(name) === i;
     });

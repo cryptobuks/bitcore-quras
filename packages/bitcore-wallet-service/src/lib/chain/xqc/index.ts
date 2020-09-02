@@ -65,19 +65,19 @@ export class XqcChain implements IChain {
 
         const responseBalance = convertedBalance['XQC'];
         responseBalance.gas = convertedBalance['XQG'];
+        responseBalance.claim = balance.claim;
 
         server.storage.fetchAddresses(server.walletId, (err, addresses: IAddress[]) => {
           if (err) return cb(err);
 
           if (addresses.length > 0) {
-            const byAddress = [
+            responseBalance.byAddress = [
               {
                 address: addresses[0].address,
                 path: addresses[0].path,
                 amount: responseBalance.totalAmount
               }
             ];
-            responseBalance.byAddress = byAddress;
           }
           return cb(null, responseBalance);
         });
