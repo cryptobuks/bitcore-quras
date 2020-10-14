@@ -160,7 +160,7 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
     const query: any = {
       chain,
       network,
-      'asset.type': 'GoverningToken'
+      'asset.type': 'GovernmentToken'
     };
 
     query.$and = [
