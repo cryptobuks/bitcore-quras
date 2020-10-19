@@ -75,12 +75,12 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
   async getBalanceForAddress(params: GetBalanceForAddressParams) {
     const { address } = params;
 
-    const claimInfo = await QurasApi.qurasDB.getClaimInfo(associatedNetworks[params.network], address) as any;
+    const claimInfo = (await QurasApi.qurasDB.getClaimInfo(associatedNetworks[params.network], address)) as any;
     const balance = await QurasLib.get.balance(associatedNetworks[params.network], address);
     let allBalances = {
       claim: {
         available: '0',
-        unavailable: '0',
+        unavailable: '0'
       }
     } as any;
     try {
@@ -89,9 +89,9 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
           available: claimInfo.available.amount,
           unavailable: claimInfo.unavailable.amount,
           tx: QurasTx.Transaction.createClaimTxWithQurasDB(address, claimInfo.available, {}).serialize(false)
-        }
+        };
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
     const assetSymbols = balance.assetSymbols.filter((name, i) => {
