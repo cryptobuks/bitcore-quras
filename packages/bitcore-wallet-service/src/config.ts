@@ -1,3 +1,5 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 module.exports = {
   basePath: '/bws/api',
   disableLogs: false,
@@ -64,6 +66,14 @@ module.exports = {
         url: 'https://api-xrp.bitcore.io'
       }
     },
+    xqcn: {
+      livenet: {
+        url: 'http://localhost:3000'
+      },
+      testnet: {
+        url: 'http://localhost:3000'
+      }
+    },
     socketApiKey: 'socketApiKey'
   },
   pushNotificationsOpts: {
@@ -72,7 +82,8 @@ module.exports = {
     defaultUnit: 'btc',
     subjectPrefix: '',
     pushServerUrl: 'https://fcm.googleapis.com/fcm',
-    authorizationKey: 'You_have_to_put_something_here'
+    authorizationKey:
+      'AAAAwcm6ruk:APA91bE0dOSrD90Gus5zFM3r1IZCPo5DVnBcWUeun__GHgrXrtjDRUOepbEapA4OU8af_7d7KNbTjkv4SDLnbrFYJSancZSefDKqTh3KWGM-Iv5FyXCJ1EObTZSaGhtiwcdhBt4jUMyI'
   },
   fiatRateServiceOpts: {
     defaultProvider: 'BitPay',

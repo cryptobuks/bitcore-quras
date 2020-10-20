@@ -88,10 +88,11 @@
     "bitcore-p2p": "^8.20.4",
     "bitcore-p2p-cash": "^8.20.4",
     "bitcore-wallet-client-quras": "^8.20.6",
+    "request-promise-native": "^1.0.5",
     "body-parser": "1.18.3",
     "cors": "2.8.4",
     "crypto-rpc": "^1.1.0",
-    "crypto-wallet-core-quras": "^8.20.6",
+    "crypto-wallet-core-quras": "^8.22.0",
     "heapdump": "0.3.12",
     "http": "0.0.0",
     "lodash": "4.17.11",
@@ -110,7 +111,8 @@
     "through2": "2.0.3",
     "underscore": "1.8.3",
     "web3": "1.2.4",
-    "winston": "3.2.0"
+    "winston": "3.2.0",
+    "quras-js": "^1.9.4"
   },
   "gitHead": "012cc0216a9bc6b195035855bd17149bad41acd1"
 }

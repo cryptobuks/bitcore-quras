@@ -21,7 +21,8 @@ var Bitcore_ = {
   btc: CWC.BitcoreLib,
   bch: CWC.BitcoreLibCash,
   eth: CWC.BitcoreLib,
-  xrp: CWC.BitcoreLib
+  xrp: CWC.BitcoreLib,
+  xqcn: CWC.QurascoreLib
 };
 var Mnemonic = require('bitcore-mnemonic');
 var url = require('url');
@@ -620,7 +621,7 @@ export class API extends EventEmitter {
           inputIndex: i,
           signature,
           sigtype:
-          // tslint:disable-next-line:no-bitwise
+            // tslint:disable-next-line:no-bitwise
             bitcore.crypto.Signature.SIGHASH_ALL | bitcore.crypto.Signature.SIGHASH_FORKID,
           publicKey: pub
         };
@@ -1463,9 +1464,9 @@ export class API extends EventEmitter {
               encryptedPkr: opts.doNotEncryptPkr
                 ? null
                 : Utils.encryptMessage(
-                  JSON.stringify(this.credentials.publicKeyRing),
-                  this.credentials.personalEncryptingKey
-                ),
+                    JSON.stringify(this.credentials.publicKeyRing),
+                    this.credentials.personalEncryptingKey
+                  ),
               unencryptedPkr: opts.doNotEncryptPkr ? JSON.stringify(this.credentials.publicKeyRing) : null,
               m: this.credentials.m,
               n: this.credentials.n
@@ -2399,6 +2400,8 @@ export class API extends EventEmitter {
     var checkKey = (key, cb) => {
       let opts = [
         // coin, network,  multisig
+        ['xqcn', 'livenet'],
+        ['xqcn', 'testnet'],
         ['btc', 'livenet'],
         ['bch', 'livenet'],
         ['eth', 'livenet'],
