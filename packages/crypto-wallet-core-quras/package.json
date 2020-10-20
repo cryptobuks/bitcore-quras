@@ -1,6 +1,6 @@
 {
   "name": "crypto-wallet-core-quras",
-  "version": "8.21.0",
+  "version": "8.22.1",
   "description": "A multi-currency support library for address derivation, private key creation, and transaction creation",
   "main": "./ts_build/src/index.js",
   "types": "./ts_build/src/index.d.ts",
@@ -34,7 +34,7 @@
     "ripple-binary-codec": "0.2.6",
     "ripple-keypairs": "git+https://git@github.com/bitpay/ripple-keypairs.git#8d3a4643a8ddfce8222786e1e5a3e85a89a5b7f5",
     "ripple-lib": "1.4.2",
-    "quras-js": "^1.7.9",
+    "quras-js": "^1.9.4",
     "web3": "1.2.1",
     "bignumber.js": "^9.0.0"
   },

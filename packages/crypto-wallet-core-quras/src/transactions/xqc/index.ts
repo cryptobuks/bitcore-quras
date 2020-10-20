@@ -9,7 +9,7 @@ export class XQCTxProvider {
     fee: number;
   }) {
     const balanceData = params.balanceInfo;
-    const balance = new Quras.wallet.Balance(balanceData as any);
+    const balance = new Quras.wallet.Balance(balanceData as any) as any;
     const scriptHash = Quras.wallet.getScriptHashFromAddress(params.recipients[0].address);
     const balanceResult = this.getBalanceJSONData(balanceData);
     const xqgValue = parseFloat(balanceResult['XQGValue']);
@@ -21,7 +21,7 @@ export class XQCTxProvider {
 
     const outputs = [
       {
-        assetId: '52a4b58d99af84e0ca33318f3724e92c14835d97af46714a4a68a098a3843276',
+        assetId: balance.assets['XQC'].assetId,
         value: Number(params.recipients[0].amount) / 10 ** 8,
         fee,
         scriptHash
