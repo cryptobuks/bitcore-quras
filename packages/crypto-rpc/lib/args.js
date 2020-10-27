@@ -1,38 +1,37 @@
-const program = require('commander');
+const program = require("commander");
 
-
-const ERC20Currencies = ['ETH', 'PAX', 'USDC', 'GUSD', 'XQC'];
-const chainEQCurrencies = ['BTC', 'BCH', 'XRP'];
+const ERC20Currencies = ["ETH", "PAX", "USDC", "GUSD", "XQC", "XQG"];
+const chainEQCurrencies = ["BTC", "BCH", "XRP"];
 
 program
-  .option('--node <node>')
-  .option('--currency <currency>')
-  .option('--address <address>')
-  .option('--port <port>')
-  .option('--host <host>')
-  .option('--user <user>')
-  .option('--password <password>')
-  .option('--protocol <protocol>')
-  .option('--amount <amount>')
-  .option('--token <token>')
-  .option('--unlock <bool>')
-  .option('--method <proxy method>')
+  .option("--node <node>")
+  .option("--currency <currency>")
+  .option("--address <address>")
+  .option("--port <port>")
+  .option("--host <host>")
+  .option("--user <user>")
+  .option("--password <password>")
+  .option("--protocol <protocol>")
+  .option("--amount <amount>")
+  .option("--token <token>")
+  .option("--unlock <bool>")
+  .option("--method <proxy method>")
   // params should be comma seperated values
-  .option('--params <method parameters>');
+  .option("--params <method parameters>");
 
 function chainFromCurrency(currency) {
   if (ERC20Currencies.includes(currency)) {
-    return 'ETH';
+    return "ETH";
   }
   if (chainEQCurrencies.includes(currency)) {
     return currency;
   }
-  throw new Error('Unknown Currency');
+  throw new Error("Unknown Currency");
 }
 
 let params;
 
-try{
+try {
   program.parse(process.argv);
 } catch (e) {
   console.error(e.message);
@@ -41,7 +40,7 @@ try{
 }
 
 try {
-  const config = require('../config');
+  const config = require("../config");
   const rpcHost = config[program.node];
   params = {
     ...rpcHost,
@@ -56,7 +55,7 @@ if (program.currency) {
 }
 
 if (!params.protocol) {
-  params.protocol = 'http';
+  params.protocol = "http";
 }
 
 module.exports = params;

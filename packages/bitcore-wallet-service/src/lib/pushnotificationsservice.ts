@@ -341,6 +341,7 @@ export class PushNotificationsService {
       gusd: 'GUSD',
       busd: 'BUSD',
       xqc: 'XQC',
+      xqg: 'XQG',
       xqcn: 'XQCN'
     };
     const data = _.cloneDeep(notification.data);

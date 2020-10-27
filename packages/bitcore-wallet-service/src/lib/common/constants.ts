@@ -20,7 +20,8 @@ module.exports = {
     PAX: 'pax',
     GUSD: 'gusd',
     BUSD: 'busd',
-    XQC: 'xqc'
+    XQC: 'xqc',
+    XQG: 'xqg'
   },
 
   UTXO_COINS: {

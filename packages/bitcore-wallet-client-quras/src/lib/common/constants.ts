@@ -22,7 +22,7 @@ export const Constants = {
   },
   BIP45_SHARED_INDEX: 0x80000000 - 1,
   COINS: ['btc', 'bch', 'eth', 'xrp', 'usdc', 'pax', 'gusd', 'busd', 'xqc', 'xqcn'],
-  ERC20: ['usdc', 'pax', 'gusd', 'busd', 'xqc'],
+  ERC20: ['usdc', 'pax', 'gusd', 'busd', 'xqc', 'xqg'],
   UTXO_COINS: ['btc', 'bch'],
   TOKEN_OPTS: CWC.Constants.TOKEN_OPTS,
   UNITS: CWC.Constants.UNITS
