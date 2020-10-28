@@ -97,14 +97,14 @@ export class XqcChain implements IChain {
   }
 
   getWalletSendMaxInfo(server, wallet, opts, cb) {
-    server.getBalance({}, (err, balance) => {
+    server.getBalance({assetId: opts.assetId}, (err, balance) => {
       if (err) return cb(err);
       const { availableAmount } = balance;
-      // let fee = opts.feePerKb * Defaults.MIN_GAS_LIMIT;
+      let fee = opts.feePerKb;
       return cb(null, {
         utxosBelowFee: 0,
         amountBelowFee: 0,
-        amount: availableAmount,
+        amount: availableAmount - (opts.assetId ? fee : 0),
         feePerKb: opts.feePerKb,
         fee: opts.feePerKb
       });
@@ -205,7 +205,7 @@ export class XqcChain implements IChain {
   }
 
   selectTxInputs(server, txp, wallet, opts, cb) {
-    server.getBalance({ wallet, tokenAddress: opts.tokenAddress }, (err, balance) => {
+    server.getBalance({ wallet, assetId: opts.assetId }, (err, balance) => {
       if (err) return cb(err);
 
       const { totalAmount, availableAmount } = balance;

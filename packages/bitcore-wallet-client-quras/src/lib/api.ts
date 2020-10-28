@@ -2097,6 +2097,7 @@ export class API extends EventEmitter {
     if (opts.feePerKb != null) args.push('feePerKb=' + opts.feePerKb);
     if (opts.excludeUnconfirmedUtxos) args.push('excludeUnconfirmedUtxos=1');
     if (opts.returnInputs) args.push('returnInputs=1');
+    if (opts.assetId) args.push('assetId=' + opts.assetId);
 
     var qs = '';
 

@@ -1658,7 +1658,6 @@ export class WalletService {
 
   getBalance(opts, cb) {
     opts = opts || {};
-
     if (opts.coin) {
       return cb(new ClientError('coin is not longer supported in getBalance'));
     }

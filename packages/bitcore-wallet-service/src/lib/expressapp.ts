@@ -641,9 +641,12 @@ export class ExpressApp {
           feeLevel?: number;
           returnInputs?: boolean;
           excludeUnconfirmedUtxos?: boolean;
+          assetId?: string;
         } = {};
         if (q.feePerKb) opts.feePerKb = +q.feePerKb;
         if (q.feeLevel) opts.feeLevel = q.feeLevel;
+        if (q.assetId) opts.assetId = q.assetId;
+
         if (q.excludeUnconfirmedUtxos == '1') opts.excludeUnconfirmedUtxos = true;
         if (q.returnInputs == '1') opts.returnInputs = true;
         server.getSendMaxInfo(opts, (err, info) => {
