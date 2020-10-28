@@ -123,6 +123,7 @@ export class TxProposal {
   gasLimit?: number; // Backward compatibility for BWC <= 8.9.0
   data?: string; // Backward compatibility for BWC <= 8.9.0
   tokenAddress?: string;
+  assetId?: string;
   destinationTag?: string;
   invoiceID?: string;
   lockUntilBlockHeight?: number;
@@ -195,6 +196,7 @@ export class TxProposal {
     x.gasLimit = opts.gasLimit; // Backward compatibility for BWC <= 8.9.0
     x.data = opts.data; // Backward compatibility for BWC <= 8.9.0
     x.tokenAddress = opts.tokenAddress;
+    x.assetId = opts.assetId;
 
     // XRP
     x.destinationTag = opts.destinationTag;
@@ -262,6 +264,8 @@ export class TxProposal {
     x.invoiceID = obj.invoiceID;
     x.balanceInfo = obj.balanceInfo;
 
+    // XQCN
+    x.assetId = obj.assetId;
     if (x.status == 'broadcasted') {
       x.raw = obj.raw;
     }

@@ -368,7 +368,8 @@ export class ExpressApp {
           includeExtendedInfo: false,
           twoStep: false,
           includeServerMessages: false,
-          tokenAddress: req.query.tokenAddress
+          tokenAddress: req.query.tokenAddress,
+          assetId: req.query.assetId,
         };
         if (req.query.includeExtendedInfo == '1') opts.includeExtendedInfo = true;
         if (req.query.twoStep == '1') opts.twoStep = true;
@@ -801,10 +802,12 @@ export class ExpressApp {
           limit?: number;
           includeExtendedInfo?: boolean;
           tokenAddress?: string;
+          assetId?: string;
         } = {};
         if (req.query.skip) opts.skip = +req.query.skip;
         if (req.query.limit) opts.limit = +req.query.limit;
         if (req.query.tokenAddress) opts.tokenAddress = req.query.tokenAddress;
+        if (req.query.assetId) opts.assetId = req.query.assetId;
         if (req.query.includeExtendedInfo == '1') opts.includeExtendedInfo = true;
 
         server.getTxHistory(opts, (err, txs) => {

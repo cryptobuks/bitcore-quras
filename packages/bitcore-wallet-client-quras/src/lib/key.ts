@@ -9,7 +9,8 @@ import { BitcoreLib, BitcoreLibCash, Deriver, QurascoreLib, Transactions } from 
 
 var Bitcore = BitcoreLib;
 var Bitcore_ = {
-  xqcn: QurascoreLib
+  xqcn: QurascoreLib,
+  xqg: QurascoreLib,
 };
 var Mnemonic = require('bitcore-mnemonic');
 var sjcl = require('sjcl');

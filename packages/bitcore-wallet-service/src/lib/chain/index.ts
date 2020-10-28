@@ -77,6 +77,9 @@ class ChainProxy {
     if (Constants.ERC20[normalizedChain]) {
       normalizedChain = 'ETH';
     }
+    if (Constants.XQCASSETS[normalizedChain]) {
+      normalizedChain = 'XQCN';
+    }
     return normalizedChain;
   }
 

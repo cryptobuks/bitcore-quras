@@ -73,8 +73,7 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
   }
 
   async getBalanceForAddress(params: GetBalanceForAddressParams) {
-    const { address } = params;
-
+    const { address, args } = params;
     const claimInfo = (await QurasApi.qurasDB.getClaimInfo(associatedNetworks[params.network], address)) as any;
     const balance = await QurasLib.get.balance(associatedNetworks[params.network], address);
     let allBalances = {
@@ -83,30 +82,43 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
         unavailable: '0'
       }
     } as any;
-    try {
-      if (+claimInfo.available.amount) {
-        allBalances.claim = {
-          available: claimInfo.available.amount,
-          unavailable: claimInfo.unavailable.amount,
-          tx: QurasTx.Transaction.createClaimTxWithQurasDB(address, claimInfo.available, {}).serialize(false)
-        };
+    if (!args.assetId) {
+      try {
+        if (+claimInfo.available.amount) {
+          allBalances.claim = {
+            available: claimInfo.available.amount,
+            unavailable: claimInfo.unavailable.amount,
+            tx: QurasTx.Transaction.createClaimTxWithQurasDB(address, claimInfo.available, {}).serialize(false)
+          };
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
     const assetSymbols = balance.assetSymbols.filter((name, i) => {
       return balance.assetSymbols.indexOf(name) === i;
     });
+
     assetSymbols.forEach(assetSymbol => {
-      const confirmed = balance.assets[assetSymbol].unspent.reduce((currValue, item) => {
+      const assetInfo = balance.assets[assetSymbol] as any;
+      const confirmed = assetInfo.unspent.reduce((currValue, item) => {
         currValue += Number(item.value) * 10 ** 8;
         return currValue;
       }, 0);
-      allBalances[assetSymbol] = {
-        confirmed,
-        unconfirmed: 0,
-        balance: confirmed
-      };
+      if (!args.assetId || (args.assetId === assetInfo.assetId) || (assetSymbol === 'XQG')) {
+        allBalances[args.assetId || assetSymbol] = {
+          confirmed,
+          unconfirmed: 0,
+          balance: confirmed
+        };
+        if ((args.assetId === assetInfo.assetId) && (assetSymbol === 'XQG')) {
+          allBalances[assetSymbol] = {
+            confirmed,
+            unconfirmed: 0,
+            balance: confirmed
+          };
+        }
+      }
     });
     return allBalances;
   }
@@ -154,14 +166,27 @@ export class XQCStateProvider extends InternalStateProvider implements IChainSta
   async streamWalletTransactions(params) {
     const { chain, network, wallet, res, args } = params;
 
+
     const addresses = await this.getWalletAddresses(params.wallet._id);
     const address = addresses[0].address;
+    let query;
 
-    const query: any = {
-      chain,
-      network,
-      'asset.type': 'GoverningToken'
-    };
+    if (!args.assetId) {
+      query = {
+        chain,
+        network,
+        'asset.type': 'GoverningToken'
+      };
+    } else {
+      const asset = await this.getAssetInfo(args.assetId, network) as any;
+      query = {
+        chain,
+        network,
+        'asset.type': asset.type,
+        'asset.symbol': asset.symbol,
+        'asset.name': asset.name,
+      };
+    }
 
     query.$and = [
       {

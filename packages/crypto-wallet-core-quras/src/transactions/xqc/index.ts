@@ -7,6 +7,7 @@ export class XQCTxProvider {
     from: string;
     balanceInfo: any;
     fee: number;
+    assetId?: string;
   }) {
     const balanceData = params.balanceInfo;
     const balance = new Quras.wallet.Balance(balanceData as any) as any;
@@ -21,7 +22,7 @@ export class XQCTxProvider {
 
     const outputs = [
       {
-        assetId: balance.assets['XQC'].assetId,
+        assetId: params.assetId || balance.assets['XQC'].assetId,
         value: Number(params.recipients[0].amount) / 10 ** 8,
         fee,
         scriptHash

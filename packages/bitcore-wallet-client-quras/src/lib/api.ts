@@ -1111,7 +1111,9 @@ export class API extends EventEmitter {
     if (opts.tokenAddress) {
       qs.push('tokenAddress=' + opts.tokenAddress);
     }
-
+    if (opts.assetId) {
+      qs.push('assetId=' + opts.assetId);
+    }
     this.request.get('/v3/wallets/?' + qs.join('&'), (err, result) => {
       if (err) return cb(err);
       if (result.wallet.status == 'pending') {
@@ -1413,6 +1415,9 @@ export class API extends EventEmitter {
     }
     if (opts.tokenAddress) {
       args.push('tokenAddress=' + opts.tokenAddress);
+    }
+    if (opts.assetId) {
+      args.push('assetId=' + opts.assetId);
     }
     var qs = '';
     if (args.length > 0) {
@@ -1846,6 +1851,7 @@ export class API extends EventEmitter {
       if (opts.skip) args.push('skip=' + opts.skip);
       if (opts.limit) args.push('limit=' + opts.limit);
       if (opts.tokenAddress) args.push('tokenAddress=' + opts.tokenAddress);
+      if (opts.assetId) args.push('assetId=' + opts.assetId);
       if (opts.includeExtendedInfo) args.push('includeExtendedInfo=1');
     }
     var qs = '';
