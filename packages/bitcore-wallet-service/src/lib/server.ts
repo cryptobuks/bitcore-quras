@@ -1154,9 +1154,12 @@ export class WalletService {
       {
         name: 'assetIds',
         isValid(value) {
-          return _.isArray(value) && value.every((x) => {
-            return /^[0-9a-f]{64}$/ig.test(x);
-          });
+          return (
+            _.isArray(value) &&
+            value.every(x => {
+              return /^[0-9a-f]{64}$/gi.test(x);
+            })
+          );
         }
       }
     ];
@@ -1201,7 +1204,6 @@ export class WalletService {
             oldPref.tokenAddresses = oldPref.tokenAddresses || [];
             preferences.tokenAddresses = _.uniq(oldPref.tokenAddresses.concat(opts.tokenAddresses));
           }
-
 
           // merge assetIds
           if (opts.assetIds) {
