@@ -758,6 +758,7 @@ export class WalletService {
             if (err) return next(err);
             if (!opts.includeExtendedInfo) {
               preferences.tokenAddresses = null;
+              preferences.assetIds = null;
             }
             status.preferences = preferences;
             next();
@@ -1149,6 +1150,14 @@ export class WalletService {
         isValid(value) {
           return _.isArray(value) && value.every(x => Validation.validateAddress('eth', 'mainnet', x));
         }
+      },
+      {
+        name: 'assetIds',
+        isValid(value) {
+          return _.isArray(value) && value.every((x) => {
+            return /^[0-9a-f]{64}$/ig.test(x);
+          });
+        }
       }
     ];
 
@@ -1172,6 +1181,10 @@ export class WalletService {
         opts.tokenAddresses = null;
       }
 
+      if (wallet.coin != 'xqcn') {
+        opts.assetIds = null;
+      }
+
       this._runLocked(cb, cb => {
         this.storage.fetchPreferences(this.walletId, this.copayerId, (err, oldPref) => {
           if (err) return cb(err);
@@ -1187,6 +1200,14 @@ export class WalletService {
             oldPref = oldPref || {};
             oldPref.tokenAddresses = oldPref.tokenAddresses || [];
             preferences.tokenAddresses = _.uniq(oldPref.tokenAddresses.concat(opts.tokenAddresses));
+          }
+
+
+          // merge assetIds
+          if (opts.assetIds) {
+            oldPref = oldPref || {};
+            oldPref.assetIds = oldPref.assetIds || [];
+            preferences.assetIds = _.uniq(oldPref.assetIds.concat(opts.assetIds));
           }
 
           this.storage.storePreferences(preferences, err => {

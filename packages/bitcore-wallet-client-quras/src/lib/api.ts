@@ -2394,6 +2394,21 @@ export class API extends EventEmitter {
               clients.push(tokenClient);
             });
           }
+          const assetIds = status.preferences.assetIds;
+          if (!_.isEmpty(assetIds)) {
+            _.each(assetIds, t => {
+              const asset = Constants.ASSET_OPTS[t];
+              if (!asset) {
+                log.warn(`Asset ${t} unknown`);
+                return;
+              }
+              log.info(`Importing asset: ${asset.name}`);
+              const assetCredentials = client.credentials.getTokenCredentials(asset);
+              let assetClient = _.cloneDeep(client);
+              assetClient.credentials = assetCredentials;
+              clients.push(assetClient);
+            });
+          }
           return icb(null, clients);
         }
         if (err instanceof Errors.NOT_AUTHORIZED || err instanceof Errors.WALLET_DOES_NOT_EXIST) {

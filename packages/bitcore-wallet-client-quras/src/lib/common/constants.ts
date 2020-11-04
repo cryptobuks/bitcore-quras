@@ -26,5 +26,6 @@ export const Constants = {
   XQCASSETS: ['xqg'],
   UTXO_COINS: ['btc', 'bch'],
   TOKEN_OPTS: CWC.Constants.TOKEN_OPTS,
+  ASSET_OPTS: CWC.Constants.ASSET_OPTS,
   UNITS: CWC.Constants.UNITS
 };
