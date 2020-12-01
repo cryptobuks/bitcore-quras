@@ -758,6 +758,7 @@ export class WalletService {
             if (err) return next(err);
             if (!opts.includeExtendedInfo) {
               preferences.tokenAddresses = null;
+              preferences.assetIds = null;
             }
             status.preferences = preferences;
             next();
@@ -1149,6 +1150,17 @@ export class WalletService {
         isValid(value) {
           return _.isArray(value) && value.every(x => Validation.validateAddress('eth', 'mainnet', x));
         }
+      },
+      {
+        name: 'assetIds',
+        isValid(value) {
+          return (
+            _.isArray(value) &&
+            value.every(x => {
+              return /^[0-9a-f]{64}$/gi.test(x);
+            })
+          );
+        }
       }
     ];
 
@@ -1172,6 +1184,10 @@ export class WalletService {
         opts.tokenAddresses = null;
       }
 
+      if (wallet.coin != 'xqcn') {
+        opts.assetIds = null;
+      }
+
       this._runLocked(cb, cb => {
         this.storage.fetchPreferences(this.walletId, this.copayerId, (err, oldPref) => {
           if (err) return cb(err);
@@ -1187,6 +1203,13 @@ export class WalletService {
             oldPref = oldPref || {};
             oldPref.tokenAddresses = oldPref.tokenAddresses || [];
             preferences.tokenAddresses = _.uniq(oldPref.tokenAddresses.concat(opts.tokenAddresses));
+          }
+
+          // merge assetIds
+          if (opts.assetIds) {
+            oldPref = oldPref || {};
+            oldPref.assetIds = oldPref.assetIds || [];
+            preferences.assetIds = _.uniq(oldPref.assetIds.concat(opts.assetIds));
           }
 
           this.storage.storePreferences(preferences, err => {
@@ -1658,7 +1681,6 @@ export class WalletService {
 
   getBalance(opts, cb) {
     opts = opts || {};
-
     if (opts.coin) {
       return cb(new ClientError('coin is not longer supported in getBalance'));
     }
@@ -2174,7 +2196,7 @@ export class WalletService {
                   return next();
                 },
                 async next => {
-                  if (opts.coin === 'xqcn') {
+                  if (opts.coin === 'xqcn' || !!opts.assetId) {
                     opts.balanceInfo = await ChainService.checkBalanceInfo(this, wallet, opts);
                   }
                   return next();
@@ -2233,6 +2255,7 @@ export class WalletService {
                     gasLimit, // Backward compatibility for BWC < v7.1.1
                     data: opts.data, // Backward compatibility for BWC < v7.1.1
                     tokenAddress: opts.tokenAddress,
+                    assetId: opts.assetId,
                     destinationTag: opts.destinationTag,
                     invoiceID: opts.invoiceID,
                     signingMethod: opts.signingMethod,
@@ -3378,9 +3401,10 @@ export class WalletService {
     let streamKey;
 
     let walletCacheKey = wallet.id;
-    if (opts.tokenAddress) {
+    if (opts.assetId || opts.tokenAddress) {
+      wallet.assetId = opts.assetId;
       wallet.tokenAddress = opts.tokenAddress;
-      walletCacheKey = `${wallet.id}-${opts.tokenAddress}`;
+      walletCacheKey = `${wallet.id}-${opts.assetId || opts.tokenAddress}`;
     }
 
     async.series(

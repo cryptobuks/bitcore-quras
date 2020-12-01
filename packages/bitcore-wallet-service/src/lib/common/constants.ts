@@ -12,7 +12,8 @@ module.exports = {
     GUSD: 'gusd',
     BUSD: 'busd',
     XQC: 'xqc',
-    XQCN: 'xqcn'
+    XQCN: 'xqcn',
+    XQG: 'xqg'
   },
 
   ERC20: {
@@ -21,6 +22,10 @@ module.exports = {
     GUSD: 'gusd',
     BUSD: 'busd',
     XQC: 'xqc'
+  },
+
+  XQCASSETS: {
+    XQG: 'xqg'
   },
 
   UTXO_COINS: {

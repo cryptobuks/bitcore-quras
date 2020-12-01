@@ -23,10 +23,13 @@ export class XqcChain implements IChain {
    * @param {Number} locked - Sum of txp.amount
    * @returns {Object} balance - Total amount & locked amount.
    */
-  private convertBitcoreBalance(bitcoreBalance: any, locked) {
+  private convertBitcoreBalance(bitcoreBalance: any, locked, assetId) {
     // we ASUME all locked as confirmed, for ETH.
     const convertedBalances = {};
     const coins = ['XQC', 'XQG'];
+    if (assetId) {
+      coins.push(assetId);
+    }
 
     for (let i of coins) {
       const { confirmed, balance } = bitcoreBalance[i] || ({} as any);
@@ -54,6 +57,9 @@ export class XqcChain implements IChain {
 
   getWalletBalance(server, wallet, opts, cb) {
     const bc = server._getBlockchainExplorer(wallet.coin, wallet.network);
+    if (opts.assetId) {
+      wallet.assetId = opts.assetId;
+    }
     bc.getBalance(wallet, (err, balance) => {
       if (err) {
         return cb(err);
@@ -61,11 +67,16 @@ export class XqcChain implements IChain {
       server.getPendingTxs(opts, (err, txps) => {
         if (err) return cb(err);
         const lockedSum = _.sumBy(txps, 'amount') || 0;
-        const convertedBalance = this.convertBitcoreBalance(balance, lockedSum);
+        const convertedBalance = this.convertBitcoreBalance(balance, lockedSum, opts.assetId);
 
-        const responseBalance = convertedBalance['XQC'];
+        let responseBalance;
+        if (!opts.assetId) {
+          responseBalance = convertedBalance['XQC'];
+          responseBalance.claim = balance.claim;
+        } else {
+          responseBalance = convertedBalance[opts.assetId];
+        }
         responseBalance.gas = convertedBalance['XQG'];
-        responseBalance.claim = balance.claim;
 
         server.storage.fetchAddresses(server.walletId, (err, addresses: IAddress[]) => {
           if (err) return cb(err);
@@ -86,14 +97,14 @@ export class XqcChain implements IChain {
   }
 
   getWalletSendMaxInfo(server, wallet, opts, cb) {
-    server.getBalance({}, (err, balance) => {
+    server.getBalance({assetId: opts.assetId}, (err, balance) => {
       if (err) return cb(err);
       const { availableAmount } = balance;
-      // let fee = opts.feePerKb * Defaults.MIN_GAS_LIMIT;
+      let fee = opts.feePerKb;
       return cb(null, {
         utxosBelowFee: 0,
         amountBelowFee: 0,
-        amount: availableAmount,
+        amount: availableAmount - (opts.assetId ? fee : 0),
         feePerKb: opts.feePerKb,
         fee: opts.feePerKb
       });
@@ -124,7 +135,7 @@ export class XqcChain implements IChain {
   }
 
   getBitcoreTx(txp, opts = { signed: true }) {
-    const { data, outputs, payProUrl, tokenAddress } = txp;
+    const { data, outputs, assetId } = txp;
     const chain = 'XQCN';
     const recipients = outputs.map(output => {
       return {
@@ -194,7 +205,7 @@ export class XqcChain implements IChain {
   }
 
   selectTxInputs(server, txp, wallet, opts, cb) {
-    server.getBalance({ wallet, tokenAddress: opts.tokenAddress }, (err, balance) => {
+    server.getBalance({ wallet, assetId: opts.assetId }, (err, balance) => {
       if (err) return cb(err);
 
       const { totalAmount, availableAmount } = balance;

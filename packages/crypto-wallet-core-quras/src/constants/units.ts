@@ -119,5 +119,16 @@ export let UNITS = {
       maxDecimals: 6,
       minDecimals: 2
     }
+  },
+  xqg: {
+    toSatoshis: 1e8,
+    full: {
+      maxDecimals: 8,
+      minDecimals: 8
+    },
+    short: {
+      maxDecimals: 6,
+      minDecimals: 2
+    }
   }
 };

@@ -35,6 +35,9 @@ export class Utils {
     if (Constants.ERC20.includes(coin)) {
       normalizedChain = 'ETH';
     }
+    if (Constants.XQCASSETS.includes(coin)) {
+      normalizedChain = 'XQCN';
+    }
     return normalizedChain;
   }
 

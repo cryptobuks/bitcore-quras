@@ -1111,7 +1111,9 @@ export class API extends EventEmitter {
     if (opts.tokenAddress) {
       qs.push('tokenAddress=' + opts.tokenAddress);
     }
-
+    if (opts.assetId) {
+      qs.push('assetId=' + opts.assetId);
+    }
     this.request.get('/v3/wallets/?' + qs.join('&'), (err, result) => {
       if (err) return cb(err);
       if (result.wallet.status == 'pending') {
@@ -1413,6 +1415,9 @@ export class API extends EventEmitter {
     }
     if (opts.tokenAddress) {
       args.push('tokenAddress=' + opts.tokenAddress);
+    }
+    if (opts.assetId) {
+      args.push('assetId=' + opts.assetId);
     }
     var qs = '';
     if (args.length > 0) {
@@ -1846,6 +1851,7 @@ export class API extends EventEmitter {
       if (opts.skip) args.push('skip=' + opts.skip);
       if (opts.limit) args.push('limit=' + opts.limit);
       if (opts.tokenAddress) args.push('tokenAddress=' + opts.tokenAddress);
+      if (opts.assetId) args.push('assetId=' + opts.assetId);
       if (opts.includeExtendedInfo) args.push('includeExtendedInfo=1');
     }
     var qs = '';
@@ -2091,6 +2097,7 @@ export class API extends EventEmitter {
     if (opts.feePerKb != null) args.push('feePerKb=' + opts.feePerKb);
     if (opts.excludeUnconfirmedUtxos) args.push('excludeUnconfirmedUtxos=1');
     if (opts.returnInputs) args.push('returnInputs=1');
+    if (opts.assetId) args.push('assetId=' + opts.assetId);
 
     var qs = '';
 
@@ -2385,6 +2392,21 @@ export class API extends EventEmitter {
               let tokenClient = _.cloneDeep(client);
               tokenClient.credentials = tokenCredentials;
               clients.push(tokenClient);
+            });
+          }
+          const assetIds = status.preferences.assetIds;
+          if (!_.isEmpty(assetIds)) {
+            _.each(assetIds, t => {
+              const asset = Constants.ASSET_OPTS[t];
+              if (!asset) {
+                log.warn(`Asset ${t} unknown`);
+                return;
+              }
+              log.info(`Importing asset: ${asset.name}`);
+              const assetCredentials = client.credentials.getTokenCredentials(asset);
+              let assetClient = _.cloneDeep(client);
+              assetClient.credentials = assetCredentials;
+              clients.push(assetClient);
             });
           }
           return icb(null, clients);

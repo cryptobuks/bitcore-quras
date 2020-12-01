@@ -132,9 +132,11 @@ export class Credentials {
   /*
    * creates an ERC20 wallet from a ETH wallet
    */
-  getTokenCredentials(token: { name: string; symbol: string; address: string }) {
+  getTokenCredentials(token: {
+    assetId?: string;
+    name: string; symbol: string; address?: string }) {
     const ret = _.cloneDeep(this);
-    ret.walletId = `${ret.walletId}-${token.address}`;
+    ret.walletId = `${ret.walletId}-${token.address || token.assetId}`;
     ret.coin = token.symbol.toLowerCase();
     ret.walletName = token.name;
     ret.token = token;
