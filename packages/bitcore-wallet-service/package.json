@@ -43,7 +43,7 @@
     "nodemailer": "^5.1.1",
     "npmlog": "^0.1.1",
     "preconditions": "^2.2.3",
-    "quras-js": "^1.9.4",
+    "quras-js": "2.0.0",
     "qurascore-lib": "^8.20.8",
     "read": "^1.0.5",
     "request": "^2.53.0",
